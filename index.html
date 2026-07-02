@@ -176,6 +176,10 @@ body{
   gap:11px;
 }
 .tile{
+  font-family:inherit;
+  appearance:none;
+  -webkit-appearance:none;
+  outline:none;
   position:relative;
   aspect-ratio:1/1.02;
   border-radius:18px;
@@ -334,12 +338,12 @@ body{
   <p class="section-label">바로가기</p>
   <div class="tile-grid">
 
-    <a class="tile active" href="https://ccc-finance.vercel.app" aria-label="재정 — 회비 납부 및 확인">
+    <button class="tile active" id="financeTile" aria-label="재정 — 회비 납부 및 확인">
       <span class="tile-icon">
         <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="6" width="18" height="13" rx="2.2" stroke="#fff" stroke-width="1.7"/><path d="M3 10H21" stroke="#fff" stroke-width="1.7"/><circle cx="7" cy="14.5" r="1.1" fill="#fff"/></svg>
       </span>
       <span class="tile-name">재정</span>
-    </a>
+    </button>
 
     <button class="tile soon" data-soon="아침모임 출석">
       <span class="tile-sub">준비중</span>
@@ -399,6 +403,10 @@ body{
     clearTimeout(toastTimer);
     toastTimer = setTimeout(() => toastEl.classList.remove('show'), 2400);
   }
+  document.getElementById('financeTile').addEventListener('click', () => {
+    window.location.href = 'https://ccc-finance.vercel.app';
+  });
+
   document.querySelectorAll('[data-soon]').forEach(btn => {
     btn.addEventListener('click', () => {
       showToast(`${btn.getAttribute('data-soon')} 기능은 준비 중이에요 🙏`);
