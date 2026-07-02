@@ -405,6 +405,13 @@ body{
     });
   });
 
+  // ---- 서비스 워커 등록 (PWA 설치 가능하게 함) ----
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js').catch(() => {});
+    });
+  }
+
   // ---- 홈 화면 추가 배너 ----
   (function(){
     const banner = document.getElementById('installBanner');
@@ -441,13 +448,22 @@ body{
       });
       reveal();
     } else {
+      titleEl.textContent = '제천 CCC를 앱처럼 쓰세요';
+      subEl.textContent = '홈 화면에 추가하면 앱처럼 실행돼요';
+      actionBtn.textContent = '추가';
       actionBtn.addEventListener('click', async () => {
-        if (!deferredPrompt) { showToast('브라우저 메뉴에서 "홈 화면에 추가"를 선택해주세요'); return; }
-        deferredPrompt.prompt();
-        await deferredPrompt.userChoice;
-        deferredPrompt = null;
-        banner.classList.remove('show');
+        if (deferredPrompt) {
+          deferredPrompt.prompt();
+          await deferredPrompt.userChoice;
+          deferredPrompt = null;
+          banner.classList.remove('show');
+        } else {
+          showToast('브라우저 메뉴(⋮) → "홈 화면에 추가"를 눌러주세요 📲');
+        }
       });
+      // beforeinstallprompt가 안 뜨는 브라우저(삼성인터넷 등)도 있으므로
+      // 이벤트 유무와 상관없이 일정 시간 후 배너는 항상 노출한다.
+      reveal();
     }
 
     closeBtn.addEventListener('click', () => {
